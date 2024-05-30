@@ -1,0 +1,134 @@
+﻿@model ShopWebsite.Areas.BackEnd.ViewModel.BannerViewModel.BannerCreateViewModel
+
+@{
+    ViewData["Title"] = "新增廣告";
+    var breadcrumbDict = new Dictionary<string, string[]> { { "新增廣告", new string[] { "廣告管理", "廣告設定", "新增廣告" } } };
+}
+
+<style>
+    .cke_editor_BannerContxt {
+        border: solid 1px #ced4da;
+    }
+</style>
+
+@Html.Partial("_PageTitlePartial", breadcrumbDict)
+
+<div class="card">
+    <div class="card-header">
+        <h5>新增廣告</h5>
+    </div>
+    <form asp-action="Create" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+
+                    <div class="mb-3 row">
+                        <label asp-for="BannerTitle" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9 col-form-label">
+                            <input asp-for="BannerTitle" class="form-control" />
+                        </div>
+                        <span asp-validation-for="BannerTitle" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label asp-for="BannerDescription" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input asp-for="BannerDescription" class="form-control" />
+                        </div>
+                        <span asp-validation-for="BannerDescription" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="mb-3 row">
+                        <label asp-for="BannerContxt" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            @*<input asp-for="BannerContxt" class="form-control" type="password" autocomplete="off" />*@
+                            <textarea asp-for="BannerContxt" class="form-control ckeditor"></textarea>
+                        </div>
+                        <span asp-validation-for="BannerContxt" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label asp-for="BannerImg1" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <label style="display:block; border: solid 1px #ced4da;">
+                                <img id="imgPreview" src="~/BackEnd/cloud-upload.jpg" style="width:50%" />
+                                <input asp-for="BannerImg1" class="form-control" type="file" style="display:none;" onchange="showPreview(event)" />
+                            </label>
+                        </div>
+                        <span asp-validation-for="BannerImg1" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label asp-for="BannerPutTime" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input asp-for="BannerPutTime" class="form-control" type="date" autocomplete="off" />
+                        </div>
+                        <span asp-validation-for="BannerPutTime" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label asp-for="BannerOffTime" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input asp-for="BannerOffTime" class="form-control" type="date" autocomplete="off" />
+                        </div>
+                        <span asp-validation-for="BannerOffTime" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="mb-3 row">
+                        <label asp-for="BannerPublish" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <select asp-for="BannerPublish" class="form-control">
+                                <option value="true">啟用</option>
+                                <option value="false">關閉</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="BannerPublish" class="text-danger"></span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-end">
+            <div class="col-sm-9 offset-sm-3">
+                <button class="btn btn-primary" type="submit">送出</button>
+                <input class="btn btn-light" type="reset" value="重設">
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    var imgPreview = document.querySelector('#imgPreview');
+
+    var file = document.querySelector('#imgPreview');
+
+
+    function showPreview(event) {
+        if (event.target.files.length > 0) {
+            var src = URL.createObjectURL(event.target.files[0]);
+            imgPreview.src = src;
+            imgPreview.style.display = "block";
+        }
+    }
+
+
+
+    ClassicEditor
+        .create( document.querySelector( '.ckeditor' ), {
+            toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ],
+        } )
+        .then( editor => {
+            console.log( editor );
+        } )
+        .catch( error => {
+            console.error( error );
+        } );
+</script>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

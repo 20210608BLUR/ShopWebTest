@@ -1,0 +1,111 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cuba admin is super flexible, powerful, clean &amp; modern responsive bootstrap 5 admin template with unlimited possibilities.">
+    <meta name="keywords" content="admin template, Cuba admin template, dashboard template, flat admin template, responsive admin template, web app">
+    <meta name="author" content="pixelstrap">
+    <link rel="icon" href="~/BackEnd/assets/images/favicon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="~/BackEnd/assets/images/favicon.png" type="image/x-icon">
+    <title>Alex後臺管理 - 登入</title>
+    <!-- Google font-->
+    <link href="https://fonts.googleapis.com/css?family=Rubik:400,400i,500,500i,700,700i&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="~/BackEnd/assets/css/font-awesome.css">
+    <!-- ico-font-->
+    <link rel="stylesheet" type="text/css" href="~/BackEnd/assets/css/vendors/icofont.css">
+    <!-- Themify icon-->
+    <link rel="stylesheet" type="text/css" href="~/BackEnd/assets/css/vendors/themify.css">
+    <!-- Flag icon-->
+    <link rel="stylesheet" type="text/css" href="~/BackEnd/assets/css/vendors/flag-icon.css">
+    <!-- Feather icon-->
+    <link rel="stylesheet" type="text/css" href="~/BackEnd/assets/css/vendors/feather-icon.css">
+    <!-- Plugins css start-->
+    <!-- Plugins css Ends-->
+    <!-- Bootstrap css-->
+    <link rel="stylesheet" type="text/css" href="~/BackEnd/assets/css/vendors/bootstrap.css">
+    <!-- App css-->
+    <link rel="stylesheet" type="text/css" href="~/BackEnd/assets/css/style.css">
+    <link id="color" rel="stylesheet" href="~/BackEnd/assets/css/color-1.css" media="screen">
+    <!-- Responsive css-->
+    <link rel="stylesheet" type="text/css" href="~/BackEnd/assets/css/responsive.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body>
+    <!-- login page start-->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xl-7"><img class="bg-img-cover bg-center" src="~/BackEnd/assets/images/login/2.jpg" alt="looginpage"></div>
+        <div class="col-xl-5 p-0">
+          <div class="login-card">
+            <div>
+              <div><a class="logo text-start" href="#"><img class="img-fluid for-light" src="~/BackEnd/assets/images/logo/logo.png" alt="looginpage"><img class="img-fluid for-dark" src="~/BackEnd/assets/images/logo/logo_dark.png" alt="looginpage"></a></div>
+              <div class="login-main"> 
+                <form asp-action="index" method="post" class="theme-form">
+                  <h4>登入帳戶</h4>
+                  <p>請輸入您的帳號和密碼以登入</p>
+                  <div class="form-group">
+                    <label class="col-form-label">帳號</label>
+                    <input class="form-control" type="text"  placeholder="Test" name="account">
+                  </div>
+                  <div class="form-group">
+                    <label class="col-form-label">密碼</label>
+                    <div class="form-input position-relative">
+                      <input class="form-control" type="password" required="" placeholder="*********" name = "password">
+                    </div>
+                  </div>
+                  <div class="form-group mb-0">
+                    <hr class="my-4">
+                    <button class="btn btn-primary btn-block w-100" type="submit">登入</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- latest jquery-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+      <!-- Bootstrap js-->
+      <script src="~/BackEnd/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
+      <!-- feather icon js-->
+      <script src="~/BackEnd/assets/js/icons/feather-icon/feather.min.js"></script>
+      <script src="~/BackEnd/assets/js/icons/feather-icon/feather-icon.js"></script>
+      <!-- scrollbar js-->
+      <!-- Sidebar jquery-->
+      <script src="~/BackEnd/assets/js/config.js"></script>
+      <!-- Plugins JS start-->
+      <!-- Plugins JS Ends-->
+      <!-- Theme js-->
+      <script src="~/BackEnd/assets/js/script.js"></script>
+      <!-- Plugin used-->
+    </div>
+
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <script>
+            var errorMessage = "@Html.Raw(TempData["ErrorMessage"])";
+
+            Swal.fire({
+                    position: 'center-center',
+                    icon: 'error',
+                    title: errorMessage,
+                    showConfirmButton: false,
+                    timer: 1500
+            })
+        </script>
+    }
+
+
+  </body>
+</html>

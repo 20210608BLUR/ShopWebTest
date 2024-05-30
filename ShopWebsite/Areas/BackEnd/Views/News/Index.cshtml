@@ -1,0 +1,245 @@
+﻿@model IEnumerable<ShopWebsite.Areas.BackEnd.ViewModel.NewsViewModel.NewsIndexViewModel>
+
+@{
+    ViewData["Title"] = "消息列表";
+    var breadcrumbDict = new Dictionary<string, string[]> { { "消息列表", new string[] { "消息管理", "消息設定" } } };
+}
+
+<!-- 麵包屑及標題-->
+@Html.Partial("_PageTitlePartial", breadcrumbDict)
+
+<style>
+    .responsive-image {
+        max-width: 100%;
+        max-height: 200px; /* 調整圖片的最大高度 */
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Zero Configuration  Starts-->
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header pb-0 card-no-border">
+                    <div class="title d-flex">
+                        <div class="col-11"><h3>消息設定列表</h3></div>
+                        <div class="col-1 text-end"><a asp-controller="News" asp-action="Create" class="btn btn-primary btn-sm">新增</a></div>
+                    </div>
+                    <hr />
+                </div>
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="display" id="datatable">
+                            <thead>
+                                <tr>
+                                    <th class="col-1">
+                                        @Html.DisplayNameFor(model => model.NewsNum)
+                                    </th>
+                                    <th class="col-2">
+                                        @Html.DisplayNameFor(model => model.NewsTitle)
+                                    </th >
+                                    <th class="col-2">
+                                        @Html.DisplayNameFor(model => model.NewsDescription)
+                                    </th>
+                                    <th class="col-1">
+                                        @Html.DisplayNameFor(model => model.NewsImg1)
+                                    </th>
+                                    <th class="col-1">
+                                        @Html.DisplayNameFor(model => model.NewsPutTime)
+                                    </th>
+                                    <th class="col-1">
+                                        @Html.DisplayNameFor(model => model.CreateTime)
+                                    </th>
+                                    <th class="col-1">
+                                        @Html.DisplayNameFor(model => model.EditTime)
+                                    </th>
+                                    <th class="col-1">
+                                        @Html.DisplayNameFor(model => model.NewsOffTime)
+                                    </th>
+                                    <th class="col-1">
+                                        @Html.DisplayNameFor(model => model.NewsPublish)
+                                    </th>
+                                    <th class ="col-1">處理</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.NewsNum)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.NewsTitle)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.NewsDescription)
+                                        </td>
+                                        <td>
+                                            <img style="max-width:100px" src="@Url.Content("~/uploads/News/" + item.NewsImg1)" />
+                                        </td>                                        
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.NewsPutTime)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.CreateTime)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.EditTime)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.NewsOffTime)
+                                        </td>
+                                        <td>
+                                            @{
+                                                if (@item.NewsPublish == true)
+                                                {
+                                                    <span>啟用</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>未啟用</span>
+                                                }
+                                            }
+                                        </td>
+                                        <td>
+                                            <ul class="action">
+                                                <li class="edit"> <a asp-action="Edit" asp-route-id="@item.NewsNum"><i class="icon-pencil-alt"></i></a></li>
+                                                <li class="delete"><a href="#" class="deletes" data-id="@item.NewsNum"><i class="icon-trash"></i></a></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">確定要刪除嗎?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary close" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="saveChangesButton">確定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var NewsNum = "";
+    $('.deletes').click(function () {
+
+        NewsNum = $(this).data('id');
+
+        var url = '/BackEnd/News/Delete/' + NewsNum
+        
+
+        axios.get(url)
+            .then(function (response) {
+
+                // 將回應的資料插入到模態對話框中
+                var content = response.data;
+                var obj = JSON.parse(content);
+                var imageUrl = '@Url.Content("~/uploads/News/")' + obj.NewsImg1;
+                $('.modal-body').html(`
+                                            <p>編號: ${obj.NewsNum}</p>
+                                            <p>名稱: ${obj.NewsTitle}</p>
+                                            <p>圖片: <img src="${imageUrl}" alt="Banner Image" class="responsive-image" /></p>
+                                            <p>描述: ${obj.NewsDescription}</p>
+                                        `);
+
+                // 開啟模態對話框
+                $('#exampleModal').modal('show');
+            })
+            .catch(function (error) {
+                // 處理錯誤
+                console.log(error);
+            });
+
+    });
+    
+
+    $('.close').click(function () {
+        $('#exampleModal').modal('hide');
+    });
+
+
+    $('#saveChangesButton').click(function () {
+        // 進行 POST 請求
+        axios.post('/BackEnd/News/DeleteConfirmed/' + NewsNum)
+            .then(function (response) {
+                $('#exampleModal').modal('hide');
+                // 處理回應
+                console.log(response.data)
+                Swal.fire({
+                    position: 'center-center',
+                    icon: 'success',
+                    title: response.data,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                // 其他後續處理
+                // 延遲執行 location.reload()
+                setTimeout(function () {
+                    location.reload();
+                }, 1500); // 延遲 1 秒後重新載入網頁
+            })
+            .catch(function (error) {
+                // 處理錯誤
+                console.log(error);
+            });
+    });
+
+    var n = $('.paginate_button').text() 
+    
+
+</script>
+
+<script>
+    //設定中的"_XXXX_"是套件的數據替換, 可以不帶入, 另外, 名稱不同的話會被當作純文字顯示
+    document.addEventListener("DOMContentLoaded", function (event) {
+        $('#datatable').DataTable({
+            "language": {
+                "processing": "處理中...",
+                "loadingRecords": "載入中...",
+                "lengthMenu": "顯示 _MENU_ 項結果",
+                "zeroRecords": "沒有符合的結果",
+                "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+                "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+                "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                "infoPostFix": "",
+                "search": "搜尋:",
+                "paginate": {
+                    "first": "第一頁",
+                    "previous": "上一頁",
+                    "next": "下一頁",
+                    "last": "最後一頁"
+                },
+                "aria": {
+                    "sortAscending": ": 升冪排列",
+                    "sortDescending": ": 降冪排列"
+                }
+            }
+        });
+
+        
+    });
+</script>

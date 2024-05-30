@@ -1,0 +1,213 @@
+﻿@model ShopWebsite.Areas.BackEnd.ViewModel.ProductViewModel.ProductCreateViewModel
+
+@{
+    ViewData["Title"] = "新增產品";
+    var breadcrumbDict = new Dictionary<string, string[]> { { "新增產品", new string[] { "產品管理", "產品設定", "新增產品" } } };
+}
+
+<style>
+    .cke_editor_ProductContxt {
+        border: solid 1px #ced4da;
+    }
+</style>
+
+<!-- 麵包屑及標題-->
+@Html.Partial("_PageTitlePartial", breadcrumbDict)
+
+<div class="card">
+    <div class="card-header">
+        <h5>新增產品</h5>
+    </div>
+    <form asp-action="Create" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+
+                    <div class="mb-3 row">
+                        <label asp-for="ProductClass" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            @Html.DropDownListFor(model => model.ProductClass, new SelectList(ViewBag.ProductClass, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                        </div>
+                        <span asp-validation-for="ProductClass" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label asp-for="ProductTitle" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9 col-form-label">
+                            <input asp-for="ProductTitle" class="form-control" />
+                        </div>
+                        <span asp-validation-for="ProductTitle" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label asp-for="ProductDescription" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input asp-for="ProductDescription" class="form-control" />
+                        </div>
+                        <span asp-validation-for="ProductDescription" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label asp-for="ProductPrice" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input asp-for="ProductPrice" class="form-control" />
+                        </div>
+                        <span asp-validation-for="ProductPrice" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label asp-for="ProductContxt" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            @*<input asp-for="BannerContxt" class="form-control" type="password" autocomplete="off" />*@
+                            <textarea asp-for="ProductContxt" class="form-control ckeditor"></textarea>
+                        </div>
+                        <span asp-validation-for="ProductContxt" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="mb-3 row">
+                        <label asp-for="Tag" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input asp-for="Tag" class="form-control" placeholder="請用,分隔" />
+                        </div>
+                        <span asp-validation-for="Tag" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="mb-3 row">
+                        <label asp-for="ProductImg1" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <label style="display:block; border: solid 1px #ced4da;">
+                                <img id="imgPreview" src="~/BackEnd/cloud-upload.jpg" style="width:50%" />
+                                <input asp-for="ProductImg1" class="form-control" type="file" style="display:none;" onchange="showPreview(event)" />
+                            </label>
+                        </div>
+                        <span asp-validation-for="ProductImg1" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="mb-3 row">
+                        <label asp-for="ProductImgList" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <label style="display:block; border: solid 1px #ced4da;">
+                                <div id="imagePreviews">
+                                    <img id="imagePreviews" src="~/BackEnd/cloud-upload.jpg" style="width:50%" />
+                                </div>
+                                <input asp-for="ProductImgList" class="form-control" type="file" style="display:none;" onchange="handleFileSelect(event)" multiple />
+                            </label>
+                        </div>
+                        <span asp-validation-for="ProductImgList" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <img id="preview" src="" style="max-width:200px;max-height:200px;" />
+                            <input asp-for="ProductImg1" class="form-control" type="hidden" />
+                        </div>
+                    </div>
+
+
+
+                    <div class="mb-3 row">
+                        <label asp-for="ProductPutTime" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input asp-for="ProductPutTime" class="form-control" type="date" autocomplete="off" />
+                        </div>
+                        <span asp-validation-for="ProductPutTime" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label asp-for="ProductOffTime" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input asp-for="ProductOffTime" class="form-control" type="date" autocomplete="off" />
+                        </div>
+                        <span asp-validation-for="ProductOffTime" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="mb-3 row">
+                        <label asp-for="ProductPublish" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <select asp-for="ProductPublish" class="form-control">
+                                <option value="true">啟用</option>
+                                <option value="false">關閉</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="ProductPublish" class="text-danger"></span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-end">
+            <div class="col-sm-9 offset-sm-3">
+                <button class="btn btn-primary" type="submit">送出</button>
+                <input class="btn btn-light" type="reset" value="重設">
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    var imgPreview = document.querySelector('#imgPreview');
+
+    function showPreview(event) {
+        if (event.target.files.length > 0) {
+            var src = URL.createObjectURL(event.target.files[0]);
+            imgPreview.src = src;
+            imgPreview.style.display = "block";
+        }
+    }
+
+
+    function handleFileSelect(event) {
+        
+        var imagePreviews = document.getElementById('imagePreviews');
+        imagePreviews.innerHTML = ''; // 清空預覽圖
+
+        if (event.target.files.length > 0) {
+            for (var i = 0; i < event.target.files.length; i++) {
+                // 建立 img 
+                var img = document.createElement('img');
+                img.src = URL.createObjectURL(event.target.files[i]);
+                img.className = 'preview-image';
+
+                console.log(img.src);
+
+                img.style.width = '500px';
+
+                // 將 img 加到預覽容器中
+                imagePreviews.appendChild(img);
+
+                // 換行
+                var hr = document.createElement('hr');
+                imagePreviews.appendChild(hr);
+            }
+        }
+    }
+
+
+
+
+    ClassicEditor
+        .create(document.querySelector('.ckeditor'), {
+            toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote'],
+        })
+        .then(editor => {
+            console.log(editor);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+</script>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

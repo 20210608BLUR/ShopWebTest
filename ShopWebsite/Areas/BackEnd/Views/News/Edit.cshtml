@@ -1,0 +1,168 @@
+﻿@model ShopWebsite.Areas.BackEnd.ViewModel.NewsViewModel.NewsEditViewModel
+
+@{
+    ViewData["Title"] = "編輯消息";
+    var breadcrumbDict = new Dictionary<string, string[]> { { "編輯消息", new string[] { "消息管理", "消息設定", "編輯消息" } } };
+}
+
+<style>
+    .cke_editor_NewsContxt {
+        border: solid 1px #ced4da;
+    }
+</style>
+
+<!-- 麵包屑及標題-->
+@Html.Partial("_PageTitlePartial", breadcrumbDict)
+
+<div class="card">
+    <div class="card-header">
+        <h5>新增消息</h5>
+    </div>
+    <form asp-action="edit" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+
+                    <input type="hidden" asp-for="NewsNum" />
+
+                    <div class="mb-3 row">
+                        <label asp-for="NewsClass" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            @Html.DropDownListFor(model => model.NewsClass, new SelectList(ViewBag.newsClass, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                        </div>
+                        <span asp-validation-for="NewsClass" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label asp-for="NewsTitle" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9 col-form-label">
+                            <input asp-for="NewsTitle" class="form-control" />
+                        </div>
+                        <span asp-validation-for="NewsTitle" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label asp-for="NewsDescription" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input asp-for="NewsDescription" class="form-control" />
+                        </div>
+                        <span asp-validation-for="NewsDescription" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3 row">
+                        <label asp-for="NewsContxt" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <textarea asp-for="NewsContxt" class="form-control ckeditor"></textarea>
+                        </div>
+                        <span asp-validation-for="NewsContxt" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3 row">
+                        <label asp-for="Tag" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input asp-for="Tag" class="form-control" placeholder="請用,分隔" />                           
+                        </div>                         
+                        <span asp-validation-for="Tag" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3 row">
+                        <label asp-for="NewsImg1" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <label style="display:block; border: solid 1px #ced4da;">
+                                <img id="imgPreview" src="~/uploads/News/@Model.NewsImg1.FileName" style="width:50%" />
+                                <input asp-for="NewsImg1" class="form-control" type="file" style="display:none;" onchange="showPreview(event)" />
+                            </label>
+                        </div>
+                        <span asp-validation-for="NewsImg1" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="mb-3 row">
+                        <label asp-for="NewsPutTime" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input asp-for="NewsPutTime" class="form-control" type="date" autocomplete="off" />
+                        </div>
+                        <span asp-validation-for="NewsPutTime" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label asp-for="NewsOffTime" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input asp-for="NewsOffTime" class="form-control" type="date" autocomplete="off" />
+                        </div>
+                        <span asp-validation-for="NewsOffTime" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="mb-3 row">
+                        <label asp-for="NewsPublish" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <select asp-for="NewsPublish" class="form-control">
+                                <option value="true">啟用</option>
+                                <option value="false">關閉</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="NewsPublish" class="text-danger"></span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-end">
+            <div class="col-sm-9 offset-sm-3">
+                <button class="btn btn-primary edit" type="submit" id="test">送出</button>
+                <input class="btn btn-light" type="reset" value="重設">
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    var imgPreview = document.querySelector('#imgPreview');
+
+    var file = document.querySelector('#imgPreview');
+
+   
+    function showPreview(event) {
+        if (event.target.files.length > 0) {
+            var src = URL.createObjectURL(event.target.files[0]);
+            imgPreview.src = src;
+            imgPreview.style.display = "block";
+
+           
+        }
+         
+    }
+
+
+
+    ClassicEditor
+        .create(document.querySelector('.ckeditor'), {
+            toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote'],
+        })
+        .then(editor => {
+            console.log(editor);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
+
+        
+   
+</script>
+<script>
+  
+        $('.edit').click(function () {
+         alert('編輯成功')
+    });
+    
+    </script>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+
+

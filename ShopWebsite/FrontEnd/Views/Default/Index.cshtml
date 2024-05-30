@@ -1,0 +1,213 @@
+﻿@using ShopWebsite.Areas.BackEnd.Models;
+@model ShopWebsite.FrontEnd.ViewModel.DefaultViewModel;
+@{
+    Layout = null;
+    ViewData["Title"] = "主頁";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>@ViewData["Title"]</title>
+    <!-- Stylesheets -->
+    <link href="~/FrontEnd/css/bootstrap.css" rel="stylesheet">
+    <link href="~/FrontEnd/css/revolution-slider.css" rel="stylesheet">
+    <link href="~/FrontEnd/css/style.css" rel="stylesheet">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="~/FrontEnd/images/favicon.ico" type="image/x-icon">
+    <!-- Responsive -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link href="~/FrontEnd/css/responsive.css" rel="stylesheet">
+    <!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script><![endif]-->
+    <!--[if lt IE 9]><script src="js/respond.js"></script><![endif]-->
+</head>
+
+<body class="transportation-theme">
+
+    <div class="page-wrapper">
+
+        <!-- Preloader -->
+        <div class="preloader"></div>
+
+        @{
+            @Html.Partial("_FrontEndNavbarPartial")
+        }
+
+
+        <!--輪播-->
+        <section class="main-slider style-one">
+
+            <div class="tp-banner-container">
+                <div class="tp-banner">
+                    <ul>
+
+                        @{
+                            foreach(Banner item in Model.lstBanner)
+                            {
+                                <li data-transition="fade" data-slotamount="1" data-masterspeed="1000" data-thumb="@Url.Content("~/uploads/Banner/" + item.BannerImg1)" data-saveperformance="off" data-title="Awesome Title Here">
+                                    <img src="@Url.Content("~/uploads/Banner/" + item.BannerImg1)" alt="" data-bgposition="center bottom" data-bgfit="cover" data-bgrepeat="no-repeat">
+
+                                    <!--Transparent layer Full-->
+                                    <div class="transparent-bg-layer-full"></div>
+
+                                    <div class="tp-caption sfb sft tp-resizeme"
+                                     data-x="left" data-hoffset="15"
+                                     data-y="center" data-voffset="-50"
+                                     data-speed="1500"
+                                     data-start="500"
+                                     data-easing="easeOutExpo"
+                                     data-splitin="none"
+                                     data-splitout="none"
+                                     data-elementdelay="0.01"
+                                     data-endelementdelay="0.3"
+                                     data-endspeed="1200"
+                                     data-endeasing="Power4.easeIn">
+                                        <h3 class="bigger-text">@item.BannerTitle</h3>
+                                    </div>
+
+                                    <div class="tp-caption sfb sfb tp-resizeme"
+                                     data-x="left" data-hoffset="15"
+                                     data-y="center" data-voffset="80"
+                                     data-speed="1500"
+                                     data-start="1000"
+                                     data-easing="easeOutExpo"
+                                     data-splitin="none"
+                                     data-splitout="none"
+                                     data-elementdelay="0.01"
+                                     data-endelementdelay="0.3"
+                                     data-endspeed="1200"
+                                     data-endeasing="Power4.easeIn">
+                                        <div class="text">@item.BannerDescription</div>
+                                    </div>
+
+                                </li>
+                            }
+                        }
+                    </ul>
+
+                    <div class="tp-bannertimer"></div>
+                </div>
+            </div>
+        </section>
+
+        <!--最新消息-->
+        <section class="services-style-four">
+            <div class="outer-container">
+                <div class="left-border-title">
+                    <h2>最新消息</h2>
+                    <div class="desc-text">掌握最新動態，獲取最新消息，了解行業趨勢。</div>
+                </div>
+
+                <div class="row clearfix">
+
+                    @{
+                        foreach (NewsPageViewModel item in Model.lstNewsPageViewModel)
+                        {
+                            <!--Featured Service Column-->
+                            <div class="featured-service-column col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                                <div class="inner-box wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms">
+                                    <figure class="image-box"><a asp-controller="NewsPage" asp-action="Details" asp-route-id="@item.NewsId"><img src="@Url.Content("~/uploads/News/" + item.NewsImg1)" alt=""></a></figure>
+                                    <div class="lower-content">
+                                        <h3>@item.Title</h3>
+                                        <div class="text">@item.Description</div>
+                                        <a asp-controller="NewsPage" asp-action="Details" asp-route-id="@item.NewsId" class="theme-btn btn-style-two">閱讀更多</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                </div>
+            </div>
+        </section>
+
+        <!--最新商品-->
+        <section class="default-two-column bg-lightgrey">
+            <div class="outer-container">
+                <div class="left-border-title">
+                    <h2>最新商品</h2>
+                    <div class="desc-text">最新電腦周邊產品，提升您的電腦體驗！探索先進技術和優秀設計。遊戲必備配件、辦公效率工具等多種選擇。</div>
+                </div>
+
+                <div class="items-container row clearfix">
+
+                    @{
+                        int currentNum = 1;
+                        foreach (SingleProductViewModel item in Model.lstShopPageViewModel)
+                        {
+
+                            <!--Default Portfolio Item-->
+                            <div class="portfolio-item-three masonry-item col-lg-4 col-sm-6 col-xs-12">
+                                <div class="inner-box">
+                                    <figure class="image-box">
+                                    <a href="@Url.Content("~/uploads/Product/" + item.ProductImg1)" class="image-link lightbox-image" title="@item.Title">
+                                        <img src="@Url.Content("~/uploads/Product/" + item.ProductImg1)" alt=""></a>
+                                    </figure>
+                                    <div class="layer-one"></div>
+                                    <div class="layer-two"></div>
+                                    <div class="hover-info">
+                                    <a href="@Url.Content("~/uploads/Product/" + item.ProductImg1)" class="image-link lightbox-image" title="@item.Title"><span class="icon flaticon-cross"></span></a>
+                                        <h4><a asp-controller="ShopPage" asp-action="Detail" asp-route-id="@item.ProductId" style="color:black">@item.Title</a></h4>
+                                        <div class="info">@item.ProductTypeName</div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                             currentNum++;
+                        }
+                    }
+
+
+                </div>
+
+            </div>
+        </section>
+
+        @{
+            @Html.Partial("_FrontEndFooterPartial")
+        }
+
+    </div>
+    <!--End pagewrapper-->
+    <!--Scroll to top-->
+    <div class="scroll-to-top scroll-to-target" data-target=".site-header"><span class="fa fa-long-arrow-up"></span></div>
+
+
+    <!--Search Popup-->
+    <div id="search-popup" class="search-popup">
+        <div class="close-search theme-btn"><span class="flaticon-cross-1"></span></div>
+        <div class="popup-inner">
+
+            <div class="search-form">
+                <form method="post" action="index.html">
+                    <div class="form-group">
+                        <fieldset>
+                            <input type="search" class="form-control" name="search-input" value="" placeholder="Search Here" required>
+                            <input type="submit" value="Search" class="theme-btn">
+                        </fieldset>
+                    </div>
+                </form>
+
+                <br>
+                <h3>Recent Search Keywords</h3>
+                <ul class="recent-searches">
+                    <li><a href="#">Business</a></li>
+                    <li><a href="#">Web Development</a></li>
+                    <li><a href="#">SEO</a></li>
+                    <li><a href="#">Logistics</a></li>
+                    <li><a href="#">Freedom</a></li>
+                </ul>
+
+            </div>
+
+        </div>
+    </div>
+
+    @{
+        @Html.Partial("_FrontEndScriptPartial")
+    }
+    
+</body>
+</html>

@@ -1,0 +1,178 @@
+﻿@using ShopWebsite.FrontEnd.ViewModel;
+@model ShopWebsite.FrontEnd.ViewModel.CartViewModel
+@{
+    ViewData["Title"] = "購物車";
+    var breadcrumbDict = new Dictionary<string, string[]> { { "結帳", new string[] { "Alex前台", "購物車" } } };
+}
+
+@Html.Partial("_FrontEndPageTitlePartial", breadcrumbDict)
+
+<style>
+    .field-validation-error {
+        color: red;
+    }
+</style>
+
+<section class="h-100 h-custom" style="background-color: #d2c9ff;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12">
+                <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+                    <div class="card-body p-0">
+                        <div class="row g-0">
+                            <div class="col-lg-8">
+                                <div class="p-5">
+                                    <div class="d-flex justify-content-between align-items-center mb-5">
+                                        <h1 class="fw-bold mb-0 text-black">購物車</h1>
+                                        <h6 class="mb-0 text-muted">
+                                           共有 @Model.singleProductViewModels.Count() 項產品
+                                        </h6>
+                                    </div>
+                                    <hr class="my-4">
+
+                                    @{
+                                        if (Model.singleProductViewModels.Count() > 0)
+                                        {
+                                            foreach (SingleProductViewModel singleProduct in Model.singleProductViewModels)
+                                            {
+                                                <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                                    <div class="col-md-2 col-lg-2 col-xl-2">
+                                                        <img src="@Url.Content("~/uploads/Product/" + singleProduct.ProductImg1)"
+                                                     class="img-fluid rounded-3" alt="Cotton T-shirt">
+                                                    </div>
+                                                    <div class="col-md-3 col-lg-3 col-xl-3">
+                                                        <h6 class="text-black mb-0">@singleProduct.Title</h6>
+                                                    </div>
+                                                    <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+
+                                                        <h6 class="mb-0">@singleProduct.amount 組</h6>
+
+                                                    </div>
+                                                    <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                                        <h6 class="mb-0">$ @singleProduct.Price</h6>
+                                                    </div>
+                                                    <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                                        <a asp-action="DelCart" asp-controller="ShopPage" asp-route-id="@singleProduct.ProductId" class="text-muted"><i class="fas fa-times"></i></a>
+                                                    </div>
+                                                </div>
+
+                                                <hr class="my-4">
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                                <div class="col-md-2 col-lg-2 col-xl-2">
+                                                </div>
+                                                <div class="col-md-3 col-lg-3 col-xl-3">
+                                                </div>
+                                                <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                                                    <h3 class="mb-0">購物車是空的!!</h3>
+                                                </div>
+                                                <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                                </div>
+                                                <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                                </div>
+                                            </div>
+
+                                            <hr class="my-4">
+                                        }
+                                    }
+
+
+                                    <div class="pt-5">
+                                        <h6 class="mb-0">
+                                            <a asp-controller="ShopPage" asp-action="Index" class="text-body">
+                                                <i class="fas fa-long-arrow-alt-left me-2"></i>回到購物頁
+                                            </a>
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 bg-grey">
+                                <div class="p-5">
+                                    <form asp-action="Index" asp-controller="Cart" method="post">
+                                        <input type="hidden" asp-for="Total" />
+                                    
+                                        <h3 class="fw-bold mb-5 mt-2 pt-1">結帳: </h3>
+                                        <hr class="my-4">
+
+                                        <h5 class="text-uppercase mb-3">收件人姓名</h5>
+                                        <div class="mb-5">
+                                            <div class="form-outline">
+                                                <input type="text" id="form3Examplea1" class="form-control form-control" asp-for="Name" autocomplete="off"/>
+                                                <label class="form-label" for="form3Examplea1">輸入姓名</label>
+                                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "field-validation-error" })
+                                            </div>
+                                        </div>
+
+
+                                        <h5 class="text-uppercase mb-3">信箱</h5>
+                                        <div class="mb-5">
+                                            <div class="form-outline">
+                                                <input type="text" id="form3Examplea1" class="form-control form-control" asp-for="EMail" autocomplete="off" />
+                                                <label class="form-label" for="form3Examplea1">輸入信箱</label>
+                                                @Html.ValidationMessageFor(model => model.EMail, "", new { @class = "field-validation-error" })
+                                            </div>
+                                        </div>
+
+
+                                        <h5 class="text-uppercase mb-2">地址</h5>
+                                        <div class="mb-5">
+                                            <div class="form-outline">
+                                                <input type="text" id="form3Examplea2" class="form-control form-control-lg" asp-for="Address" autocomplete="off" />
+                                                <label class="form-label" for="form3Examplea2">輸入地址</label>
+                                            </div>
+                                        </div>
+
+                                        <hr class="my-4">
+
+                                        <div class="d-flex justify-content-between mb-5">
+                                            <h5 class="text-uppercase">總價</h5>
+                                            <h5>$ @Model.Total</h5>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-dark btn-block btn-lg"
+                                                data-mdb-ripple-color="dark">
+                                            結帳
+                                        </button>
+
+
+
+                                        @for (var i = 0; i < Model.singleProductViewModels.Count; i++)
+                                        {
+                                            <input type="hidden" asp-for="singleProductViewModels[i].ProductImg1" />
+                                            <input type="hidden" asp-for="singleProductViewModels[i].Title" />
+                                            <input type="hidden" asp-for="singleProductViewModels[i].ProductId" />
+                                            <input type="hidden" asp-for="singleProductViewModels[i].amount" />
+                                            <input type="hidden" asp-for="singleProductViewModels[i].Price" />
+                                            <input type="hidden" asp-for="singleProductViewModels[i].tag" />
+                                        }
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function (event) {
+        var result = '@Html.Raw(ViewBag.result)';  // 將C#的ViewBag.result轉換為JavaScript字串
+
+        if (result.length > 0) {
+            Swal.fire(result, '', '')
+        }
+    });
+
+</script>

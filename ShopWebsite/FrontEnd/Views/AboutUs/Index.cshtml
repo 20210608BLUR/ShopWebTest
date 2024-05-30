@@ -1,0 +1,35 @@
+﻿@model ShopWebsite.FrontEnd.ViewModel.AboutUsPageViewModel
+
+@{
+    ViewData["Title"] = "關於我";
+    var breadcrumbDict = new Dictionary<string, string[]> { { "關於我", new string[] { "Alex前台", "關於我" } } };
+}
+
+@Html.Partial("_FrontEndPageTitlePartial",breadcrumbDict)
+
+
+<section class="default-content-section style-two">
+    <div class="outer-container">
+        <div class="row clearfix">
+            <!--Text Column-->
+            <div class="text-column col-md-7 col-sm-12 col-xs-12">
+                <figure class="logo-image"><a asp-action="Index" asp-controller="Default"><img src="~/FrontEnd/images/logo-12.png" alt=""></a></figure>
+                <h2>@Model.Title</h2>
+                <div class="text">
+                    <p>@Model.Description</p>
+                </div>
+                <div class="content-info">
+                    <strong>Alex Cai</strong><div class="designation">Dev, Obizs</div>
+                </div>
+            </div>
+
+            <!--Image Column-->
+            <div class="image-column col-md-5 col-sm-12 col-xs-12">
+                <div class="inner clearfix">
+                    <figure class="image-box wow fadeInRight" data-wow-delay="0ms" data-wow-duration="1500ms"><img src="~/FrontEnd/images/resource/featured-image-24.jpg" alt=""></figure>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

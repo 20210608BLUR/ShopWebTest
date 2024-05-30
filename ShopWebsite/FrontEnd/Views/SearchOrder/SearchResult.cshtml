@@ -1,0 +1,237 @@
+﻿@using ShopWebsite.Areas.BackEnd.ViewModel.OrderViewModel;
+@model ShopWebsite.Areas.BackEnd.ViewModel.OrderViewModel.OrderEditViewModel
+
+@{
+    var breadcrumbDict = new Dictionary<string, string[]> { { "查詢訂單", new string[] { "Alex前台", "查詢訂單" } } };
+    ViewData["Title"] = "查詢訂單";
+}
+
+@Html.Partial("_FrontEndPageTitlePartial", breadcrumbDict)
+
+<style>
+    .card-stepper {
+        z-index: 0
+    }
+
+    #progressbar-2 {
+        color: #455A64;
+    }
+
+        #progressbar-2 li {
+            list-style-type: none;
+            font-size: 13px;
+            width: 33.33%;
+            float: left;
+            position: relative;
+        }
+
+        #progressbar-2 #step1:before {
+            content: '\f058';
+            font-family: "Font Awesome 5 Free";
+            color: #fff;
+            width: 37px;
+            margin-left: 0px;
+            padding-left: 0px;
+        }
+
+        #progressbar-2 #step2:before {
+            content: '\f058';
+            font-family: "Font Awesome 5 Free";
+            color: #fff;
+            width: 37px;
+        }
+
+        #progressbar-2 #step3:before {
+            content: '\f058';
+            font-family: "Font Awesome 5 Free";
+            color: #fff;
+            width: 37px;
+            margin-right: 0;
+            text-align: center;
+        }
+
+        #progressbar-2 #step4:before {
+            content: '\f111';
+            font-family: "Font Awesome 5 Free";
+            color: #fff;
+            width: 37px;
+            margin-right: 0;
+            text-align: center;
+        }
+
+        #progressbar-2 li:before {
+            line-height: 37px;
+            display: block;
+            font-size: 12px;
+            background: #c5cae9;
+            border-radius: 50%;
+        }
+
+        #progressbar-2 li:after {
+            content: '';
+            width: 100%;
+            height: 10px;
+            background: #c5cae9;
+            position: absolute;
+            left: 0%;
+            right: 0%;
+            top: 15px;
+            z-index: -1;
+        }
+
+        #progressbar-2 li:nth-child(1):after {
+            left: 1%;
+            width: 100%
+        }
+
+        #progressbar-2 li:nth-child(2):after {
+            left: 1%;
+            width: 100%;
+        }
+
+        #progressbar-2 li:nth-child(3):after {
+            left: 1%;
+            width: 100%;
+            background: #c5cae9 !important;
+        }
+
+        #progressbar-2 li:nth-child(4) {
+            left: 0;
+            width: 37px;
+        }
+
+        #progressbar-2 li:nth-child(4):after {
+            left: 0;
+            width: 0;
+        }
+
+        #progressbar-2 li.active:before,
+        #progressbar-2 li.active:after {
+            background: #6520ff;
+        }
+</style>
+
+
+<section class="vh-10" style="background-color: #d2c9ff;">
+    <div class="container py-5 h-100" >
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12">
+        <div class="card card-stepper text-black" style="border-radius: 16px;">
+
+          <div class="card-body p-5">
+
+            @if(TempData["ErrorMessage"] != null){
+
+                <h1>@Html.Raw(TempData["ErrorMessage"])</h1>
+            }
+            else
+            {
+                <div class="d-flex justify-content-between align-items-center mb-5">
+                  <div>
+                    <h5 class="mb-0">訂單編號 <span class="text-primary font-weight-bold">@Model.OrderID</span></h5>
+                  </div>
+                  <div class="text-end">
+                    <p class="mb-0">訂單日期 <span>@Model.OrderDate.ToString("yyyy/MM/dd")</span></p>
+                    <p class="mb-0">訂單總額 <span class="font-weight-bold"> @Model.TotalAmount</span></p>
+                  </div>
+                </div>
+
+                <ul id="progressbar-2" class="d-flex justify-content-between mx-0 mt-0 mb-5 px-0 pt-0 pb-2">
+                    @switch(Model.OrderStatus)
+                    {
+                        case "確認中":
+                              <li class="step0 active text-center" id="step1"></li>
+                              <li class="step0 text-muted text-center" id="step2"></li>
+                              <li class="step0 text-muted text-center" id="step3"></li>
+                              <li class="step0 text-muted text-center" id="step4"></li>
+                            break;
+                        case "揀貨中":
+                              <li class="step0 active text-center" id="step1"></li>
+                              <li class="step0 active text-center" id="step2"></li>
+                              <li class="step0 text-muted text-end" id="step3"></li>
+                              <li class="step0 text-muted text-end" id="step4"></li>
+                            break;
+                        case "已出貨":
+                              <li class="step0 active text-center" id="step1"></li>
+                              <li class="step0 active text-center" id="step2"></li>
+                              <li class="step0 active text-center" id="step3"></li>
+                              <li class="step0 text-muted text-end" id="step4"></li>
+                            break;
+                        case "已到貨":
+                              <li class="step0 active text-center" id="step1"></li>
+                              <li class="step0 active text-center" id="step2"></li>
+                              <li class="step0 active text-center" id="step3"></li>
+                              <li class="step0 active text-center" id="step4"></li>
+                            break;
+                        default:
+                            <span>@Model.OrderStatus</span>
+                            break;
+                    }
+
+              
+                </ul>
+
+                <div class="d-flex justify-content-between">
+                  <div class="d-lg-flex align-items-center">
+                    <i class="fas fa-clipboard-list fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+                    <div>
+                      <p class="fw-bold mb-1">訂單</p>
+                      <p class="fw-bold mb-0">確認中</p>
+                    </div>
+                  </div>
+                  <div class="d-lg-flex align-items-center">
+                    <i class="fas fa-box-open fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+                    <div>
+                      <p class="fw-bold mb-1">訂單</p>
+                      <p class="fw-bold mb-0">揀貨中</p>
+                    </div>
+                  </div>
+                  <div class="d-lg-flex align-items-center">
+                    <i class="fas fa-shipping-fast fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+                    <div>
+                      <p class="fw-bold mb-1">訂單</p>
+                      <p class="fw-bold mb-0">已出貨</p>
+                    </div>
+                  </div>
+                  <div class="d-lg-flex align-items-center">
+                    <i class="fas fa-home fa-3x me-lg-4 mb-3 mb-lg-0"></i>
+                    <div>
+                      <p class="fw-bold mb-1">訂單</p>
+                      <p class="fw-bold mb-0">已到貨</p>
+                    </div>
+                  </div>
+                </div>
+
+                <hr class="my-4">
+
+                foreach(OrderProductViewModel item in Model.orderProductViewModels)
+                    {
+                        <div class="row mb-4 d-flex justify-content-between align-items-center">
+                            <div class="col-md-2 col-lg-2 col-xl-2">
+                                <img src="@Url.Content("~/uploads/Product/" + item.ProductImg)"
+                                     class="img-fluid rounded-3" alt="Cotton T-shirt">
+                            </div>
+                            <div class="col-md-3 col-lg-3 col-xl-3">
+                                <h6 class="text-black mb-0">@item.ProductName</h6>
+                            </div>
+                            <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+
+                                <h6 class="mb-0">@item.Quantity 組</h6>
+
+                            </div>
+                            <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                <h6 class="mb-0">$ @item.Price</h6>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+                    }
+            }
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
